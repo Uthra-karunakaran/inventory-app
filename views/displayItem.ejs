@@ -1,0 +1,23 @@
+<div class="itemPreview  mb-3">
+<div class="card ">
+  <div class="row g-0">
+    <div class="col-md-6">
+      <img src="<%= data.imgurl %>" class="img-fluid rounded-start itemPreviewImg" alt="Item image">
+    </div>
+    <div class="col-md-6">
+      <div class="card-body">
+        <h3 class="card-title"><%= data.name %></h3>
+        <h5 class="itemDetail">Category: <span><%= data.category_name %></span></h5>
+        <h5 class="itemDetail">Description: <span><%= data.description %></span></h5>
+        <h5 class="itemDetail">Price: <span>$<%= data.price %></span></h5>
+        <h5 class="itemDetail">Stock: <span><%= data.stock %></span></h5>
+        <div class="itemBtns">
+          <a href="/items/update/<%= data.id %>" class="editBtn">Edit</a>
+          <a href="/items/delete/<%= data.id %>" class="deleteBtn">Delete</a>
+        </div>      
+      </div>
+    </div>
+  </div>
+</div>
+</diSv>
+  

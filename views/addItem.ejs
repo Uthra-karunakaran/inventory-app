@@ -1,0 +1,42 @@
+<h3 class="h4 text-color padding-form">Add Item to Inventory</h3>
+<form action="/items/add" class="form-div"  method="POST">
+  <%- include("partials/errors.ejs") %>
+  <div class="mb-3">
+    <label for="name" class="form-label h6">Name of the Item</label>
+    <input type="text" name="name" id="name" class="form-control ip-padding" value="<%= formData.name || '' %>" placeholder="eg: Tomatos" required>
+  </div>
+  
+  <div class="mb-3">
+    <label for="categoryName"  class="form-label h6">Category Name:</label>
+    <select class="form-select" aria-label="Default select example" name="categoryName" id="categoryName" required>
+      <option selected><%= formData.categoryName || '' %></option>
+      <% formData["cat_names"].map((catname)=>{ %>
+        <option value="<%= catname.name %>"><%= catname.name %></option>
+      <% }) %>
+      
+    </select>  
+  </div>
+  <div class="input-group mb-3" style="display: flex; align-items: center;">
+    <label for="price" class="form-label h6" style="margin-right: 10px; ">Price:</label>
+    <span class="input-group-text">$</span>
+    <input type="text" name="price" id="price" style="max-width: 150px;" class="form-control" value="<%= formData.price || '' %>" aria-label="Amount (to the nearest dollar)" required>
+  </div>
+  
+  <div class="mb-3">
+    <label for="stock" class="form-label h6">Stock Available:</label>
+    <input type="number" style="max-width: 150px;" name="stock" id="stock"   min="10" value="<%= formData.stock || 10 %>" class="form-control" >
+  </div>
+  
+  <div class="mb-3">
+    <label for="description" class="form-label h6">Description:</label>
+    <textarea class="form-control" name="description" id="description" value="<%= formData.description || '' %>"  rows="3"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="imgurl" class="form-label h6">URL for Image:</label>
+    <input type="text" name="imgurl" id="imgurl" value="<%= formData.imgurl || '' %>" class="form-control"  placeholder="http://example.com" required>
+  </div>
+  
+  <div  style="display:flex; justify-content: flex-end;">
+  <button type="submit" style="display:flex; " class="editBtn">Add</button>
+  </div>
+</form>

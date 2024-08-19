@@ -1,0 +1,16 @@
+<h3 class="h3 text-color padding-form">All Categories</h3>
+
+<% if (locals.items) { %>
+    <div class="cardContainer">
+        <% items.map((item) => { %>
+            <div class="Itemcard">
+                <img class="itemCardImg" alt="item image" src="<%= item.imgurl %>">
+                <div class="itemInfo">
+                    <p class="itemName"><%= item.name %></p>
+                    <p class="itemPrice">Price: $<%= item.price %></p>
+                    <a href="/items/<%= item.id %>" class="itemButton">View Details</a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } %>

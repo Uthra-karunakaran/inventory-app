@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="bg-color col-auto col-md-3 col-xl-2 px-sm-2 px-0 ">
+            <div class="d-flex text-color flex-column align-items-center align-items-sm-start text-color px-3 pt-2  min-vh-100">
+                <p class="d-flex align-items-center pt-4 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <strong><span class="fs-5 d-none d-sm-inline h4">Menu</span></strong>
+                </p>
+                <ul class="nav nav-pills text-color flex-column mb-sm-auto mt-3 align-items-center align-items-sm-start" id="menu">
+                    <li class="custom-nav-item">
+                        <a href="/" class="nav-link align-middle text-color custom-link">
+                            <strong><span class="d-none d-sm-inline text-color">All categories</span></strong>
+                        </a>
+                    </li>
+                    <% categories.forEach((category) => { %>
+                        <li class="custom-nav-item">
+                            <a href="/items/category?id=<%= category.id %>" class="nav-link align-middle text-color custom-link">
+                               <strong> <span class="d-none d-sm-inline text-color"><%= category.name %></span></strong>
+                            </a>
+                        </li>
+                    <% }); %>
+                    
+                    <hr class="category-separator">
+
+                    <li class="custom-nav-item">
+                        <a href="/category/add" class="nav-link align-middle text-color custom-link">
+                           </i><strong> <span class="d-none d-sm-inline text-color">Add Category</span></strong>
+                        </a>
+                    </li>
+                    <li class="custom-nav-item">
+                        <a href="/items/add" class="nav-link align-middle text-color custom-link">
+                           <strong> <span class="d-none d-sm-inline text-color">Add item</span></strong>
+                        </a>                    
+                    </li>
+                </ul>
+                <hr>
+            </div>
+        </div>
+  

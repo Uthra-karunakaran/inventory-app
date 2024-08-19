@@ -1,0 +1,10 @@
+<h3 class="h4 text-color padding-form">Create New Category</h3>
+<form action="/category/add" class="form-div"  method="POST">
+  <%- include("partials/errors.ejs") %>
+  <div class="mb-3">
+    <label for="name" class="form-label h6">Name of the Category</label>
+    <input type="text" name="name" id="name" class="form-control ip-padding" value="<%= formData.name || '' %>" placeholder="eg: Flowers" required>
+  </div>
+  <button type="submit"  class="editBtn">Create</button>
+  
+</form>

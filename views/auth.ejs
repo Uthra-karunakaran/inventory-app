@@ -1,0 +1,10 @@
+<h3 class="h4 text-color padding-form">Verify Admin</h3>
+<form action="/items/delete/<%= formData.id %> "  class="form-div" method="post">
+    <%- include("partials/errors.ejs") %>
+    <div class="mb-3">
+        <label for="auth" class="form-label h6">Enter admin authentication Password</label>
+        <input type="password" name="auth" id="auth" class="form-control ip-padding" value="<%= formData.auth  || '' %>" required>
+    </div>
+    <button type="submit"  class="editBtn">Submit</button>
+  
+  </form>

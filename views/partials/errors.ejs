@@ -1,0 +1,7 @@
+<% if (locals.errors) { %>
+  <ul class="list-group mb-4">
+    <% errors.map(function(error) { %>
+      <li class="list-group-item list-group-item-danger mb-2"><%= error.msg %></li>
+    <% }); %>
+  </ul>
+<% } %>

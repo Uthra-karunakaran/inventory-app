@@ -1,0 +1,20 @@
+<% if (locals.items) { %>
+  <div class="category_items_container">
+  <div class="header">
+  <h2><%= items.category_name %></h2>
+  <a href="/category/delete/<%= items.category_id %>" class="deleteBtn"> Delete category</a>
+  </div>
+  <div class="cardContainer">
+      <% items.map((item) => { %>
+          <div class="Itemcard">
+              <img class="itemCardImg" alt="item image" src="<%= item.imgurl %>">
+              <div class="itemInfo">
+                  <p class="itemName"><%= item.name %></p>
+                  <p class="itemPrice">Price: $<%= item.price %></p>
+                  <a href="/items/<%= item.id %>" class="itemButton">View Details</a>
+              </div>
+          </div>
+      <% }) %>
+  </div>
+</div>
+<% } %>
