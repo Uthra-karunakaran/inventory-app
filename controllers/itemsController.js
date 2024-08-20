@@ -23,6 +23,11 @@ const validateItemData = [
     .trim()
     .custom((value, { req }) => {
       try {
+        // Allow the default image URL to pass validation
+        if (value === '/default_img.jpg') {
+          return true; // Validation passes
+        }
+
         // Attempt to parse the URL
         const parsedUrl = new URL(value);
 
@@ -72,9 +77,21 @@ exports.postCreateItem = [
         formData: formData,
       });
     }
-    // const {name,categoryName,price,stock,description,imgurl}=req.body;
-    // console.log({name,categoryName,price,stock,description,imgurl})
+
     // making req to dd
+    const Checkimgurl = async (req) => {
+      const imgStatus = await fetchImage(req.body['imgurl']);
+      console.log(imgStatus);
+      if (!imgStatus) {
+        // No image fetched, set to default image
+        req.body['imgurl'] = '/default_img.jpg';
+      }
+    };
+
+    // Call the function with `req`
+    await Checkimgurl(req);
+    console.log(req.body);
+    console.log('postCreateItem');
     await db.addItem(req.body);
     res.redirect('/');
   }),
@@ -87,20 +104,6 @@ exports.getDisplayItem = asynchandler(async (req, res) => {
   }
   let data = await db.getItem(id);
 
-  const Checkimgurl = async () => {
-    try {
-      const imgStatus = await fetchImage(data['imgurl']);
-      if (!imgStatus) {
-        //no img is fetched
-        data['imgurl'] = '/default_img.jpg';
-      }
-    } catch (error) {
-      // Handle any unexpected errors in image fetching
-
-      data['imgurl'] = '/default_img.jpg';
-    }
-  };
-  await Checkimgurl();
   let categories = await db.getAllCategories();
 
   res.render('layout.ejs', {
@@ -128,32 +131,12 @@ exports.getItemsByCategory = asynchandler(async (req, res) => {
   items['category_name'] = category_name['name'];
   items['category_id'] = category_name['id'];
 
-  await Promise.all(
-    items.map(async (item) => {
-      const Checkimgurl = async () => {
-        try {
-          const imgStatus = await fetchImage(item['imgurl']);
-          if (!imgStatus) {
-            //no img is fetched
-            item['imgurl'] = '/default_img.jpg';
-          }
-        } catch (error) {
-          // Handle any unexpected errors in image fetching
-
-          item['imgurl'] = '/default_img.jpg';
-        }
-      };
-      await Checkimgurl();
-    })
-  );
   res.render('layout.ejs', {
     title: `Items in ${category_name['name']}`,
     categories: categories,
     body: 'displayItemsByCategory',
     items: items,
   });
-
-  // res.render( "displayItemsByCategory", {title:`Items in Category`,rows:rows});
 });
 
 exports.getUpdateItem = asynchandler(async (req, res) => {
@@ -165,8 +148,6 @@ exports.getUpdateItem = asynchandler(async (req, res) => {
   if (item_id) {
     rows = await db.getItem(item_id);
   }
-  // res.redirect("/");
-  // <input type="text" name="category_name" id="category_name" value="<%= formData.category_name || '' %>"  >
   let categories = await db.getAllCategories();
   const cat_names = await db.getCategories();
   let formData = rows;
@@ -200,7 +181,23 @@ exports.postUpdateItem = [
       });
     }
     // if no errors
+    const Checkimgurl = async () => {
+      try {
+        const imgStatus = await fetchImage(req.body['imgurl']);
+        console.log(imgStatus);
+        if (!imgStatus) {
+          //no img is fetched
+          req.body['imgurl'] = '/default_img.jpg';
+        }
+      } catch (error) {
+        // Handle any unexpected errors in image fetching
 
+        req.body['imgurl'] = '/default_img.jpg';
+      }
+    };
+    await Checkimgurl();
+    console.log(req.body);
+    console.log('postUpdateItem ');
     req.body.id = req.params.id;
     await db.updateItem(req.body);
 
@@ -242,27 +239,25 @@ exports.postDeleteItem = asynchandler(async (req, res) => {
     });
   }
 });
-fetchImage = async (url) => {
+
+const fetchImage = async (url) => {
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+
+    // Check if the response is OK and the content type is an image
+    if (
+      !response.ok ||
+      !response.headers.get('content-type').includes('image')
+    ) {
+      throw new Error(
+        `Invalid response! status: ${response.status}, content-type: ${response.headers.get('content-type')}`
+      );
     }
+
     return true;
   } catch (error) {
-    // Handle the error, e.g., return a default value or rethrow
-    return false; // or throw error;
-  }
-};
-exports.fetchImage = async (url) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return true;
-  } catch (error) {
-    // Handle the error, e.g., return a default value or rethrow
-    return false; // or throw error;
+    // Log the error if needed
+    console.error(`Failed to fetch image: ${error.message}`);
+    return false;
   }
 };
